@@ -1,8 +1,9 @@
-import { Modal, Descriptions, Tag, Avatar, Empty } from 'antd';
+import { Modal, Descriptions, Tag, Avatar, Empty, Image } from 'antd';
 import { UserOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import type { PetaniRekap } from '../services/petaniRekapService';
+import { useState } from 'react';
 
 interface PetaniDetailModalProps {
   petani: PetaniRekap | null;
@@ -11,7 +12,21 @@ interface PetaniDetailModalProps {
 }
 
 const PetaniDetailModal = ({ petani, visible, onClose }: PetaniDetailModalProps) => {
+  const [imageError, setImageError] = useState(false);
+
   if (!petani) return null;
+
+  // Try to load farmer image
+  const getFarmerImage = () => {
+    try {
+      // Use dynamic import for the image
+      return new URL(`../assets/farmers/${petani.id}.jpeg`, import.meta.url).href;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const farmerImageUrl = getFarmerImage();
 
   // Format date to Indonesian
   const formatDate = (dateString: string | null) => {
@@ -235,13 +250,28 @@ const PetaniDetailModal = ({ petani, visible, onClose }: PetaniDetailModalProps)
         )}
 
         {/* Dokumentasi Placeholder */}
-        <div className="mt-4 p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-          <h4 className="font-bold text-gray-700 mb-2">📸 Dokumentasi</h4>
-          <Empty 
-            description="Dokumentasi akan ditambahkan"
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-            className="py-4"
-          />
+        <div className="mt-4 p-4 bg-gray-50 rounded-lg border-2 border-solid border-green-200">
+          <h4 className="font-bold text-green-800 mb-3">📸 Dokumentasi</h4>
+          {farmerImageUrl && !imageError ? (
+            <div className="flex justify-center">
+              <Image
+                src={farmerImageUrl}
+                alt={`Dokumentasi ${petani.nama}`}
+                style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'cover' }}
+                className="rounded-lg shadow-md"
+                onError={() => setImageError(true)}
+                preview={{
+                  mask: 'Klik untuk memperbesar'
+                }}
+              />
+            </div>
+          ) : (
+            <Empty 
+              description="Dokumentasi tidak tersedia"
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              className="py-4"
+            />
+          )}
         </div>
 
         {/* Peta Lokasi Lahan */}
