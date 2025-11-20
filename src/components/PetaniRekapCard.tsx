@@ -1,6 +1,7 @@
 import { Card, Avatar, Button } from 'antd';
 import { UserOutlined, EnvironmentOutlined, PhoneOutlined } from '@ant-design/icons';
 import type { PetaniRekap } from '../services/petaniRekapService';
+import { useState } from 'react';
 
 interface PetaniRekapCardProps {
   petani: PetaniRekap;
@@ -8,6 +9,19 @@ interface PetaniRekapCardProps {
 }
 
 const PetaniRekapCard = ({ petani, onClick }: PetaniRekapCardProps) => {
+  const [imageError, setImageError] = useState(false);
+
+  // Try to load farmer image
+  const getFarmerImage = () => {
+    try {
+      return new URL(`../assets/farmers/${petani.id}.jpeg`, import.meta.url).href;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const farmerImageUrl = getFarmerImage();
+
   // Generate avatar color based on name
   const getAvatarColor = (name: string) => {
     const colors = [
@@ -38,19 +52,36 @@ const PetaniRekapCard = ({ petani, onClick }: PetaniRekapCardProps) => {
       onClick={onClick}
     >
       <div className="flex flex-col items-center">
-        {/* Avatar */}
-        <Avatar
-          size={80}
-          icon={<UserOutlined />}
-          style={{
-            backgroundColor: getAvatarColor(petani.nama),
-            fontSize: '32px',
-            fontWeight: 'bold',
-            marginBottom: '16px'
-          }}
-        >
-          {getInitials(petani.nama)}
-        </Avatar>
+        {/* Avatar / Photo */}
+        {farmerImageUrl && !imageError ? (
+          <div className="mb-4 relative">
+            <img
+              src={farmerImageUrl}
+              alt={petani.nama}
+              className="rounded-full border-4 border-green-100"
+              style={{
+                width: '80px',
+                height: '80px',
+                objectFit: 'cover',
+                objectPosition: 'center top'
+              }}
+              onError={() => setImageError(true)}
+            />
+          </div>
+        ) : (
+          <Avatar
+            size={80}
+            icon={<UserOutlined />}
+            style={{
+              backgroundColor: getAvatarColor(petani.nama),
+              fontSize: '32px',
+              fontWeight: 'bold',
+              marginBottom: '16px'
+            }}
+          >
+            {getInitials(petani.nama)}
+          </Avatar>
+        )}
 
         {/* Nama Petani */}
         <h3 className="text-lg font-bold text-center mb-1" style={{ color: '#15803d' }}>

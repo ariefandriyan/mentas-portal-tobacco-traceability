@@ -1,7 +1,5 @@
-import { Modal, Descriptions, Tag, Avatar, Empty, Image } from 'antd';
-import { UserOutlined, EnvironmentOutlined } from '@ant-design/icons';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
+import { Modal, Descriptions, Tag, Avatar, Empty, Image, Button } from 'antd';
+import { UserOutlined, EnvironmentOutlined, CompassOutlined } from '@ant-design/icons';
 import type { PetaniRekap } from '../services/petaniRekapService';
 import { useState } from 'react';
 
@@ -71,23 +69,6 @@ const PetaniDetailModal = ({ petani, visible, onClose }: PetaniDetailModalProps)
   };
 
   const position = parseKoordinat(petani.koordinat);
-
-  // Custom marker icon
-  const getMarkerIcon = (varietas: string | null) => {
-    let iconColor = 'green'; // default
-    if (varietas?.toLowerCase().includes('samporis')) iconColor = 'blue';
-    else if (varietas?.toLowerCase().includes('kasturi')) iconColor = 'red';
-    else if (varietas?.toLowerCase().includes('paiton')) iconColor = 'green';
-    
-    return new L.Icon({
-      iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${iconColor}.png`,
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-  };
 
   return (
     <Modal
@@ -278,27 +259,59 @@ const PetaniDetailModal = ({ petani, visible, onClose }: PetaniDetailModalProps)
         <div className="mt-4">
           <h4 className="font-bold text-green-800 mb-3">📍 Lokasi Lahan</h4>
           {position ? (
-            <div className="rounded-lg overflow-hidden border-2 border-gray-200 shadow-md">
-              <MapContainer
-                center={position}
-                zoom={15}
-                style={{ height: '300px', width: '100%' }}
-              >
-                <TileLayer
-                  url="http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
-                  subdomains={['mt0', 'mt1', 'mt2', 'mt3']}
-                  attribution='&copy; <a href="https://maps.google.com">Google Maps</a>'
-                />
-                <Marker position={position} icon={getMarkerIcon(petani.varietas)}>
-                  <Popup>
-                    <div className="text-center">
-                      <p className="font-bold text-green-700">{petani.nama}</p>
-                      <p className="text-sm text-gray-600">{petani.varietas}</p>
-                      <p className="text-xs text-gray-500">{luasLahanHektar} ha</p>
-                    </div>
-                  </Popup>
-                </Marker>
-              </MapContainer>
+            <div className="rounded-lg border-2 border-gray-200 shadow-sm bg-white p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-green-100 p-3 rounded-lg">
+                  <EnvironmentOutlined style={{ fontSize: '32px', color: '#16a34a' }} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-gray-600 mb-1">Koordinat Lahan:</p>
+                  <p className="font-mono font-semibold text-gray-800 text-lg">{petani.koordinat}</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Button
+                  type="primary"
+                  size="large"
+                  icon={<EnvironmentOutlined />}
+                  href={`https://www.google.com/maps?q=${position[0]},${position[1]}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full h-auto py-3"
+                  style={{ backgroundColor: '#16a34a', borderColor: '#16a34a' }}
+                >
+                  <div className="flex flex-col items-start">
+                    <span className="font-semibold">Lihat di Google Maps</span>
+                    <span className="text-xs opacity-90">Buka lokasi di peta</span>
+                  </div>
+                </Button>
+                
+                <Button
+                  type="default"
+                  size="large"
+                  icon={<CompassOutlined />}
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${position[0]},${position[1]}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full h-auto py-3"
+                  style={{ borderColor: '#16a34a', color: '#16a34a' }}
+                >
+                  <div className="flex flex-col items-start">
+                    <span className="font-semibold">Petunjuk Arah</span>
+                    <span className="text-xs opacity-75">Dari lokasi Anda</span>
+                  </div>
+                </Button>
+              </div>
+              
+              <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                <p className="text-xs text-gray-600 flex items-center gap-2">
+                  <EnvironmentOutlined className="text-green-600" />
+                  <span>
+                    <strong>Alamat:</strong> {petani.alamat_lahan || 'Tidak ada data'}
+                  </span>
+                </p>
+              </div>
             </div>
           ) : (
             <div className="p-6 bg-gray-100 rounded-lg border border-gray-300 text-center">
