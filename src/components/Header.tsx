@@ -1,5 +1,5 @@
 import { Layout, Menu, Drawer, Button } from 'antd';
-import { HomeOutlined, BarChartOutlined, EnvironmentOutlined, TeamOutlined, MenuOutlined } from '@ant-design/icons';
+import { HomeOutlined, BarChartOutlined, EnvironmentOutlined, TeamOutlined, MenuOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import appLogo from '../assets/app_logo.PNG';
 
@@ -40,6 +40,35 @@ const Header = ({ transparent = false }: HeaderProps) => {
       key: 'petani',
       icon: <TeamOutlined />,
       label: <a onClick={() => scrollToSection('petani')} className="cursor-pointer">Data Petani</a>,
+    },
+    {
+      key: 'aplikasi',
+      icon: <AppstoreOutlined />,
+      label: (
+        <a 
+          href="https://petanitembakau.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="cursor-pointer"
+          style={{ color: 'inherit', textDecoration: 'none' }}
+        >
+          <span>Aplikasi</span>
+          <span 
+            style={{ 
+              marginLeft: '8px',
+              backgroundColor: '#eab308',
+              color: '#000',
+              fontSize: '10px',
+              padding: '2px 8px',
+              borderRadius: '4px',
+              fontWeight: 700,
+              display: 'inline-block'
+            }}
+          >
+            development
+          </span>
+        </a>
+      ),
     },
   ];
 
