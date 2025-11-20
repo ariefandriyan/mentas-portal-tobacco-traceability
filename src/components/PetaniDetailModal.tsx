@@ -82,18 +82,33 @@ const PetaniDetailModal = ({ petani, visible, onClose }: PetaniDetailModalProps)
       {/* Header with Avatar and Name */}
       <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-6 -mx-6 -mt-6 mb-4 rounded-t-lg">
         <div className="flex items-center gap-4">
-          <Avatar
-            size={80}
-            icon={<UserOutlined />}
-            style={{
-              backgroundColor: getAvatarColor(petani.nama),
-              fontSize: '32px',
-              fontWeight: 'bold',
-              border: '3px solid white'
-            }}
-          >
-            {getInitials(petani.nama)}
-          </Avatar>
+          {farmerImageUrl && !imageError ? (
+            <img
+              src={farmerImageUrl}
+              alt={petani.nama}
+              className="rounded-full border-4 border-white shadow-lg"
+              style={{
+                width: '80px',
+                height: '80px',
+                objectFit: 'cover',
+                objectPosition: 'center top'
+              }}
+              onError={() => setImageError(true)}
+            />
+          ) : (
+            <Avatar
+              size={80}
+              icon={<UserOutlined />}
+              style={{
+                backgroundColor: getAvatarColor(petani.nama),
+                fontSize: '32px',
+                fontWeight: 'bold',
+                border: '3px solid white'
+              }}
+            >
+              {getInitials(petani.nama)}
+            </Avatar>
+          )}
           <div>
             <h2 className="text-2xl font-bold text-white mb-1">
               {petani.nama}
