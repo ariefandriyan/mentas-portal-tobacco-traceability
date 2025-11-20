@@ -1,0 +1,68 @@
+@import 'tailwindcss';
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+* {
+  font-family: 'Nunito', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f0fdf4;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #16a34a;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #15803d;
+}
+
+/* Leaflet Popup Customization */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  width: 400px !important;
+}
+
+.leaflet-popup-tip {
+  background: white;
+}
+
+.custom-popup .ant-descriptions-item-label {
+  background-color: #f3f4f6;
+  color: #374151;
+  font-weight: 600;
+  padding: 8px 12px;
+}
+
+.custom-popup .ant-descriptions-item-content {
+  color: #1f2937;
+  padding: 8px 12px;
+}
+
+.custom-popup .ant-descriptions-bordered .ant-descriptions-item {
+  border-bottom: 1px solid #e5e7eb;
+}
